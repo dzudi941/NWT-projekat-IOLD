@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Weather app</title>
+
+  <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <script src="../node_modules/vue/dist/vue.js"></script>
+  <script src="../node_modules/vue-resource/dist/vue-resource.js"></script>
+</head>
+<body>
+  <div class="container" id="app">
+    <div class="row title">
+      <h2>Simple weather app</h2>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <label>Enter city name:</label>
+          <input v-model="query" @keyup.enter="queryWeather" @keyup.*="test" type="text" class="form-control" list="cities">
+          <datalist id="cities">
+            <option v-for="(city, index) in cityList">{{ city.name }}</option>
+          </datalist>
+        </div>
+      </div>
+    </div>
+
+    <div class="container top-buffer">
+
+      <div class="col-md-8 col-md-offset-2 main-app">
+
+        <div class="row title">
+          <h2><b>{{ cityName }}</b></h2>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-md-offset-2">
+            <img :src="imageUrl">
+          </div>
+          <div class="col-md-4 col-md-offset-2">
+            <h2>{{ temp }}</h2>
+          </div>
+        </div>
+        <div class="row title">
+          <h3><b>{{ description }}</b></h3>
+        </div>
+        <div class="row top-buffer">
+          <div class="col-md-4 col-md-offset-2">
+            <h4>{{ humidity }}</h4>
+          </div>
+          <div class="col-md-4 col-md-offset-2">
+            <h4>{{ wind }}</h4>
+          </div>
+        </div>
+        <div class="row title">
+          <h3>{{ todaysForecast }}</h3>
+        </div>
+        <div class="row top-buffer">
+          <div class="col-md-4 col-md-offset-2">
+            <h4>{{ minTemp }}</h4>
+          </div>
+          <div class="col-md-4 col-md-offset-2">
+            <h4>{{ maxTemp }}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container top-buffer">
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <iframe
+            height="450"
+            frameborder="0" style="width: 100%;"
+            :src="mapUrl" allowfullscreen>
+          </iframe> 
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="scripts/appController.js"></script>
+</body>
+</html>
