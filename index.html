@@ -2,131 +2,85 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Weather app</title>
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="assets/css/style.css">
-    <!-- JS -->
-  <script src="node_modules/vue/dist/vue.js"></script>
-  <script src="node_modules/vue-resource/dist/vue-resource.js"></script>
 
+  <script src="../node_modules/vue/dist/vue.js"></script>
+  <script src="../node_modules/vue-resource/dist/vue-resource.js"></script>
 </head>
 <body>
-
-<div class="container" id="app">
-  <div class="row title">
-    <h2>Simple weather app</h2>
-  </div>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-8 col-md-offset-2">
-        <label>Enter city name:</label>
-        <input v-model="query" @keyup.enter="queryWeather" @keyup.*="test" type="text" class="form-control" list="cities">
-        <datalist id="cities">
-          <option v-for="(city, index) in cityList">{{ city.name }}</option>
-        </datalist>
-      </div>
+  <div class="container" id="app">
+    <div class="row title">
+      <h2>Simple weather app</h2>
     </div>
-  </div>
-
-  <div class="container top-buffer">
-
-    <div class="col-md-8 col-md-offset-2 main-app">
-
-      <div class="row title">
-        <h2><b>{{ cityName }}</b></h2>
-      </div>
+    <div class="container">
       <div class="row">
-        <div class="col-md-4 col-md-offset-2">
-          <img :src="imageUrl">
-        </div>
-        <div class="col-md-4 col-md-offset-2">
-          <h2>{{ temp }}</h2>
-        </div>
-      </div>
-      <div class="row title">
-        <h3><b>{{ description }}</b></h3>
-      </div>
-      <div class="row top-buffer">
-        <div class="col-md-4 col-md-offset-2">
-          <h4>{{ humidity }}</h4>
-        </div>
-        <div class="col-md-4 col-md-offset-2">
-          <h4>{{ wind }}</h4>
+        <div class="col-md-8 col-md-offset-2">
+          <label>Enter city name:</label>
+          <input v-model="query" @keyup.enter="queryWeather" @keyup.*="test" type="text" class="form-control" list="cities">
+          <datalist id="cities">
+            <option v-for="(city, index) in cityList">{{ city.name }}</option>
+          </datalist>
         </div>
       </div>
-      <div class="row title">
-        <h3>{{ todaysForecast }}</h3>
-      </div>
-      <div class="row top-buffer">
-        <div class="col-md-4 col-md-offset-2">
-          <h4>{{ minTemp }}</h4>
+    </div>
+
+    <div class="container top-buffer">
+
+      <div class="col-md-8 col-md-offset-2 main-app">
+
+        <div class="row title">
+          <h2><b>{{ cityName }}</b></h2>
         </div>
-        <div class="col-md-4 col-md-offset-2">
-          <h4>{{ maxTemp }}</h4>
+        <div class="row">
+          <div class="col-md-4 col-md-offset-2">
+            <img :src="imageUrl">
+          </div>
+          <div class="col-md-4 col-md-offset-2">
+            <h2>{{ temp }}</h2>
+          </div>
+        </div>
+        <div class="row title">
+          <h3><b>{{ description }}</b></h3>
+        </div>
+        <div class="row top-buffer">
+          <div class="col-md-4 col-md-offset-2">
+            <h4>{{ humidity }}</h4>
+          </div>
+          <div class="col-md-4 col-md-offset-2">
+            <h4>{{ wind }}</h4>
+          </div>
+        </div>
+        <div class="row title">
+          <h3>{{ todaysForecast }}</h3>
+        </div>
+        <div class="row top-buffer">
+          <div class="col-md-4 col-md-offset-2">
+            <h4>{{ minTemp }}</h4>
+          </div>
+          <div class="col-md-4 col-md-offset-2">
+            <h4>{{ maxTemp }}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container top-buffer">
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <iframe
+            height="450"
+            frameborder="0" style="width: 100%;"
+            :src="mapUrl" allowfullscreen>
+          </iframe> 
         </div>
       </div>
     </div>
   </div>
 
-  <div class="container top-buffer">
-    <div class="row">
-      <div class="col-md-8 col-md-offset-2">
-        <iframe
-          height="450"
-          frameborder="0" style="border:0; width: 100%;"
-          :src="mapUrl" allowfullscreen>
-        </iframe> 
-      </div>
-    </div>
-  </div>
-  
-</div>
-
-<script type="text/javascript">
-var app = new Vue({
-  el: '#app',
-  data: {
-    imageUrl: '',
-    mapUrl: '',
-    cityName: '',
-    query: '',
-    cityList: [],
-    weatherData: [],
-    temp: '',
-    description: '',
-    wind: '',
-    humidity: '',
-    todaysForecast: '',
-    maxTemp: '',
-    minTemp: ''
-  },
-  methods: {
-    queryWeather(resource) {
-      this.$http.get('http://localhost/testOWM/index.php?q='+this.query).then(response => {
-        console.log(response.data)
-        this.message = response.data
-        this.imageUrl = "assets/icons/" +response.data.weather[0].icon+ ".png"
-        this.mapUrl ="https://www.google.com/maps/embed/v1/place?key=AIzaSyA92Qb_TEkGbXJ6_94JZv9iZbtWWhaLqCI&q="+response.data.coord.lat+","+response.data.coord.lon //+"&z=11"
-        this.cityName = response.data.name
-        this.weatherData = response.data
-        celsius = response.data.main.temp - 273.15
-        this.temp = "Temp: " + (Math.round(celsius * 100) / 100) + "°C"
-        this.description = response.data.weather[0].description
-        this.wind = response.data.wind.speed + "m/s wind"
-        this.humidity = response.data.main.humidity + " % humidity"
-        this.todaysForecast = "Today's Forecast: " + response.data.weather[0].main
-        this.minTemp = "Min temp: " + (response.data.main.temp_min - 273.15) + "°C"
-        this.maxTemp = "Max temp: " + (response.data.main.temp_max - 273.15) + "°C"
-        document.body.style.background = "url('assets/backgrounds/" +response.data.weather[0].icon+ ".jpg') no-repeat fixed 50% 50%";
-      }, response =>{
-        alert("error");
-      });
-    },
-  }
-})
-</script>
-
+  <script type="text/javascript" src="scripts/appController.js"></script>
 </body>
 </html>
